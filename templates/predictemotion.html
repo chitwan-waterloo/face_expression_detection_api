@@ -7,9 +7,16 @@
 </head>
 
 <body>
+    <!-- Heading of the emotion detection page -->
     <h1>Real-time Facial Expression Recognition</h1>
+
+    <!-- Hidden video element to capture the webcam feed -->
     <video id="video" width="640" height="480" autoplay style="display: none;"></video>
+
+    <!-- Canvas element to display the webcam feed and draw predictions -->
     <canvas id="canvas" width="640" height="480"></canvas>
+
+    <!-- Div to display the prediction result -->
     <div id="prediction"></div>
 
     <script>
@@ -18,10 +25,13 @@
         const context = canvas.getContext('2d');
         const prediction = document.getElementById('prediction');
 
+        // Access the user's webcam
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function(stream) {
+                // Stream the video feed to the video element
                 video.srcObject = stream;
                 video.play();
+                // Continuously draw the video on the canvas
                 requestAnimationFrame(drawVideo);
             })
             .catch(function(err) {
@@ -29,13 +39,17 @@
             });
 
         function drawVideo() {
+            // Draw the current video frame onto the canvas
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            // Request the next frame to keep the video feed updating
             requestAnimationFrame(drawVideo);
         }
 
         function captureAndPredict() {
+            // Capture the current frame from the canvas as a base64 encoded image
             const canvasData = canvas.toDataURL('image/jpeg', 0.8);
 
+            // Send the image to the Flask server for emotion prediction
             fetch('http://127.0.0.1:5000/predictemotion', {
                 method: 'POST',
                 headers: {
@@ -45,10 +59,13 @@
             })
             .then(response => response.json())
             .then(data => {
+                // Display the predicted emotion
                 prediction.innerHTML = 'Predicted Face Emotion: ' + data.emotion;
+                // Draw a rectangle around the detected face
                 context.strokeStyle = 'red';
                 context.lineWidth = 2;
                 context.strokeRect(parseInt(data.x1), parseInt(data.y1), parseInt(data.x2) - parseInt(data.x1), parseInt(data.y2) - parseInt(data.y1));
+                // Display the predicted emotion above the rectangle
                 context.fillStyle = 'yellow';
                 context.font = '20px Arial';
                 context.fillText(data.emotion, parseInt(data.x1), parseInt(data.y1) - 10);
@@ -58,6 +75,7 @@
             });
         }
 
+        // Capture and predict emotion every 300 milliseconds
         setInterval(captureAndPredict, 300);
     </script>
 </body>
