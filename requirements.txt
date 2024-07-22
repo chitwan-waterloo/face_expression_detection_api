@@ -2,7 +2,7 @@ flask
 opencv-python-headless
 numpy
 keras
-flask_cors
+flask-cors
 tensorflow
 
 click==8.1.3
