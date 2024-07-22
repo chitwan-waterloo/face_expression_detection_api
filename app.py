@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import cv2
 import numpy as np
 import base64
@@ -22,15 +22,14 @@ if face_cascade.empty():
 def extract_feature_single(image):
     feature = np.array(image)
     feature = feature.reshape(1,48,48,1)
-    return feature/255.0
+    return feature / 255.0
 
 app = Flask(__name__)
 CORS(app)
 
 @app.route('/')
-
 def home():
-    return "Hello, World! Server is Up!"
+    return render_template('home.html')
 
 labels = {0 : 'angry', 
           1 : 'disgust', 
@@ -71,5 +70,10 @@ def predict_emotion():
         return jsonify({"emotion": prediction_label,"x1":str(x),"y1":str(y),"x2":str(x+w),"y2":str(y+h)}) , 200
     
     return jsonify({"emotion": "face not detected","x1":str(0),"y1":str(0),"x2":str(0),"y2":str(0)}), 200
+
+@app.route('/predictemotion', methods=['GET'])
+def emotion_page():
+    return render_template('predictemotion.html')
+
 if __name__ == "__main__":
     app.run()
