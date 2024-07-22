@@ -2,15 +2,19 @@ from flask import Flask, request, jsonify, render_template
 import cv2
 import numpy as np
 import base64
-from keras.models import model_from_json
+# from keras.models import model_from_json
 from flask_cors import CORS
+import tensorflow as tf
+
+
+# json_file = open("emotiondetector.json", 'r')
+# model_json = json_file.read()
+# json_file.close()
+# model = model_from_json(model_json)
+# model.load_weights("emotiondetector.h5")
 
 # Load the pre-trained model
-json_file = open("emotiondetector.json", 'r')
-model_json = json_file.read()
-json_file.close()
-model = model_from_json(model_json)
-model.load_weights("emotiondetector.h5")
+model = tf.keras.models.load_model("emotiondetector.h5")
 
 # Load the face detection model
 face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
