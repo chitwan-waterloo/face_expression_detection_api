@@ -26,17 +26,18 @@ You can access the live demo of this application at: [Face Expression Detection]
 ```bash
 git clone https://github.com/chitwan-waterloo/face_expression_detection_api.git
 cd face_expression_detection_api
+```
 
 ### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
-
+```
 ### Run the Flask App
 
 ```bash
 python app.py
-
+```
 #### 
 The application will be available at http://127.0.0.1:5000
 
@@ -46,3 +47,4 @@ To build and run the application using Docker:
 ```bash
 docker build -t face_expression_detection_api .
 docker run -p 5000:5000 face_expression_detection_api
+```
