@@ -16,9 +16,6 @@ import tensorflow as tf
 # Load the pre-trained model
 model = tf.keras.models.load_model("emotiondetector.h5")
 
-# Compile the model to avoid warnings, even though it's not necessary for inference
-model.compile(optimizer='adam', loss='categorical_crossentropy')
-
 # Load the face detection model
 face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
@@ -117,4 +114,5 @@ def emotion_page():
     return render_template('predictemotion.html')
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
+
